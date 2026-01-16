@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #14b8a6;
+  --color-background: #0f172a;
+  --color-accent: #06b6d4;
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.hover\:bg-primary-dark:hover {
+  background-color: color-mix(in srgb, var(--color-primary) 85%, black);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.border-primary {
+  border-color: var(--color-primary);
+}
+
+.bg-hero {
+  background: linear-gradient(to bottom right, var(--color-background), color-mix(in srgb, var(--color-background) 85%, white), var(--color-background));
+}
+
+.bg-hero-light {
+  background-color: color-mix(in srgb, var(--color-primary) 5%, white);
+}
+
+.border-primary-light {
+  border-color: color-mix(in srgb, var(--color-primary) 30%, white);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out;
+}
