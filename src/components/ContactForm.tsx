@@ -165,7 +165,8 @@ export default function ContactForm() {
       });
 
       // 3. Envoi vers ton API Hostinger (créée à l'étape 3)
-      const response = await fetch('/api/contact', {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch('${apiUrl}/api/contact', {
         method: 'POST',
         body: formDataToSend, // Le navigateur gère automatiquement le 'Content-Type'
       });
