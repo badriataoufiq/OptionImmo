@@ -14,6 +14,12 @@ export const useGooglePlacesAutocomplete = ({
 
   useEffect(() => {
     const initAutocomplete = async () => {
+      // Vérification de la présence de la clé avant le chargement
+      if (!import.meta.env.VITE_GOOGLE_MAPS_API_KEY) {
+        console.warn('Google Maps API key non trouvée. L\'autocomplétion sera désactivée.');
+        return;
+      }
+
       try {
         await loadGoogleMapsScript();
         setIsReady(true);
@@ -26,7 +32,8 @@ export const useGooglePlacesAutocomplete = ({
   }, []);
 
   useEffect(() => {
-    if (!inputRef.current || !isReady || !window.google) return;
+    // On ajoute une vérification de sécurité supplémentaire
+    if (!inputRef.current || !isReady || !window.google || !window.google.maps) return;
 
     try {
       autocompleteRef.current = new window.google.maps.places.Autocomplete(
