@@ -85,6 +85,7 @@ export default function ContactForm() {
 
       // 3. Envoi vers ton API Hostinger (créée à l'étape 3)
       console.log('handleSubmit step3');
+      console.log(formDataToSend);
       const apiUrl = import.meta.env.VITE_API_URL || '';
       const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
