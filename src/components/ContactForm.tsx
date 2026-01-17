@@ -42,6 +42,8 @@ export default function ContactForm() {
     e.preventDefault();
     setErrorMessage('');
 
+    console.log(formData);
+
     const newErrors: Record<string, boolean> = {};
     if (!formData.last_name.trim()) newErrors.last_name = true;
     if (!formData.first_name.trim()) newErrors.first_name = true;
