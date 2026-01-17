@@ -90,17 +90,16 @@ export default function ContactForm() {
       for (let [key, value] of formDataToSend.entries()) {
         console.log(key, value); 
       }
-      
+
       const apiUrl = import.meta.env.VITE_API_URL || '';
       const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
         body: formDataToSend // Le navigateur gère automatiquement le 'Content-Type'
       });
-
+console.log(response);
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Erreur lors de l\'envoi');
-        console.log('handleSubmit error step3');
       }
 
       // Si tout est OK

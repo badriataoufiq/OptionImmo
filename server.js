@@ -53,10 +53,12 @@ const transporter = nodemailer.createTransport({
 // 4. La Route API pour le formulaire de contact
 app.post('/api/contact', upload.array('photos'), async (req, res) => {
   try {
+    console.log('server.js - app.post start try');
     const { full_name, email, phone, asset_type, asset_location, asset_value, message, deadline } = req.body;
     
     // Récupérer les noms des fichiers téléchargés
     const photoUrls = req.files.map(file => `/uploads/${file.filename}`);
+    console.log(`server.js - ${photoUrls}`);
 
     // Connexion et Insertion dans MySQL
     const connection = await mysql.createConnection(dbConfig);
@@ -65,14 +67,15 @@ app.post('/api/contact', upload.array('photos'), async (req, res) => {
       (full_name, email, phone, asset_type, asset_location, asset_value, message, deadline, photo_urls) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    
+    console.log(`server.js - ${connection}`);
+    console.log(`server.js - ${sql}`);
     await connection.execute(sql, [
       full_name, email, phone, asset_type, asset_location, asset_value, message, deadline, JSON.stringify(photoUrls)
     ]);
     await connection.end();
 
     // Envoi de l'email de confirmation
-    const mailOptions = {
+    /*const mailOptions = {
       from: `"Ton Site Immo" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Confirmation de votre demande",
@@ -80,11 +83,12 @@ app.post('/api/contact', upload.array('photos'), async (req, res) => {
       html: `<h1>Merci pour votre message !</h1><p>Nous traiterons votre demande pour le bien (Type: ${asset_type}) sous peu.</p>`
     };
 
-    await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);*/
 
     res.status(200).json({ message: 'Succès !' });
   } catch (error) {
     console.error(error);
+    console.log('server.js - catch error');
     res.status(500).json({ error: 'Erreur serveur lors du traitement' });
   }
 });
