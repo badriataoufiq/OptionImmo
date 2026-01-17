@@ -65,7 +65,8 @@ export default function ContactForm() {
     try {
       // 1. On prépare un objet FormData pour envoyer fichiers + texte en une fois
       const formDataToSend = new FormData();
-      
+      console.log('handleSubmit step1');
+
       // Ajout des champs texte
       formDataToSend.append('full_name', `${formData.first_name} ${formData.last_name}`.trim());
       formDataToSend.append('email', formData.email);
@@ -79,18 +80,21 @@ export default function ContactForm() {
       // 2. Ajout des fichiers
       selectedFiles.forEach((file) => {
         formDataToSend.append('photos', file);
+        console.log('handleSubmit step2');
       });
 
       // 3. Envoi vers ton API Hostinger (créée à l'étape 3)
+      console.log('handleSubmit step3');
       const apiUrl = import.meta.env.VITE_API_URL || '';
       const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
-        body: formDataToSend, // Le navigateur gère automatiquement le 'Content-Type'
+        body: formDataToSend // Le navigateur gère automatiquement le 'Content-Type'
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Erreur lors de l\'envoi');
+        console.log('handleSubmit error step3');
       }
 
       // Si tout est OK
@@ -102,6 +106,7 @@ export default function ContactForm() {
       });
       setSelectedFiles([]);
       setConsentGiven(false);
+      console.log('handleSubmit stepOK');
 
     } catch (error) {
       setStatus('error');
