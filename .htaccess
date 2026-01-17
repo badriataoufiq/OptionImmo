@@ -1,17 +1,20 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   
-  # S'assurer que le type MIME pour le JS est correct
+  # 1. Forcer le type MIME pour les modules JavaScript
   AddType application/javascript .js
   AddType application/javascript .mjs
 
-  # Rediriger toutes les requêtes commençant par /api vers votre app Node.js (ex: port 3000)
+  # 2. Proxy vers Node.js pour toutes les requêtes /api
+  # Assurez-vous que votre server.js écoute bien sur le port 3000
   RewriteCond %{REQUEST_URI} ^/api [NC]
   RewriteRule ^api/(.*) http://localhost:3000/api/$1 [P,L]
 
-  # Rediriger toutes les requêtes vers index.html (pour le Single Page App)
+  # 3. Gestion du routage React (Single Page App)
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
+  
+  # Si le fichier ou le dossier demandé n'existe pas, on renvoie vers index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]

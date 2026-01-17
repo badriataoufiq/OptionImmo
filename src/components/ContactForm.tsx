@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Send, CheckCircle, AlertCircle, Upload, X } from 'lucide-react';
-//import { supabase } from '../lib/supabase';
 import { useGooglePlacesAutocomplete } from '../hooks/useGooglePlacesAutocomplete';
 import { useLanguage } from '../contexts/LanguageContext';
 import PrivacyPolicy from './PrivacyPolicy';
@@ -63,88 +62,6 @@ export default function ContactForm() {
 
     setStatus('loading');
 
-    /*try {
-      const photoUrls: string[] = [];
-
-      if (selectedFiles.length > 0) {
-        for (const file of selectedFiles) {
-          const fileExt = file.name.split('.').pop();
-          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-          const filePath = `${fileName}`;
-
-          const { error: uploadError } = await supabase.storage
-            .from('asset-photos')
-            .upload(filePath, file);
-
-          if (uploadError) throw uploadError;
-
-          const { data: { publicUrl } } = supabase.storage
-            .from('asset-photos')
-            .getPublicUrl(filePath);
-
-          photoUrls.push(publicUrl);
-        }
-      }
-
-      const { error } = await supabase
-        .from('asset_inquiries')
-        .insert([{
-          full_name: `${formData.first_name} ${formData.last_name}`.trim(),
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          asset_type: formData.asset_type,
-          asset_location: formData.asset_location,
-          asset_value: formData.asset_value,
-          message: formData.message,
-          photo_urls: photoUrls
-        }]);
-
-      if (error) throw error;
-
-      const emailApiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-confirmation-email`;
-
-      try {
-        await fetch(emailApiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            firstName: formData.first_name,
-            lastName: formData.last_name,
-            assetType: formData.asset_type,
-            assetLocation: formData.asset_location,
-          }),
-        });
-      } catch (emailError) {
-        console.error('Error sending confirmation email:', emailError);
-      }
-
-      setStatus('success');
-      setFormData({
-        last_name: '',
-        first_name: '',
-        email: '',
-        phone: '',
-        company: '',
-        asset_type: '',
-        asset_location: '',
-        asset_value: '',
-        message: ''
-      });
-      setSelectedFiles([]);
-      setErrors({});
-      setConsentGiven(false);
-
-      setTimeout(() => setStatus('idle'), 10000);
-    } catch (error) {
-      setStatus('error');
-      setErrorMessage(t('contact.error'));
-      console.error('Error submitting form:', error);
-    }*/
     try {
       // 1. On prépare un objet FormData pour envoyer fichiers + texte en une fois
       const formDataToSend = new FormData();
@@ -159,23 +76,32 @@ export default function ContactForm() {
       formDataToSend.append('message', formData.message);
       formDataToSend.append('deadline', formData.company); // Ton champ company sert de deadline
 
-      // 2. Ajout des fichiers (remplace Supabase Storage)
+      // 2. Ajout des fichiers
       selectedFiles.forEach((file) => {
         formDataToSend.append('photos', file);
       });
 
       // 3. Envoi vers ton API Hostinger (créée à l'étape 3)
       const apiUrl = import.meta.env.VITE_API_URL || '';
-      const response = await fetch('${apiUrl}/api/contact', {
+      const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
         body: formDataToSend, // Le navigateur gère automatiquement le 'Content-Type'
       });
 
-      if (!response.ok) throw new Error('Erreur lors de l\'envoi');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Erreur lors de l\'envoi');
+      }
 
       // Si tout est OK
       setStatus('success');
-      // ... (Reste de ton code pour reset le formulaire)
+      setFormData({
+        last_name: '', first_name: '', email: '', phone: '',
+        company: '', asset_type: '', asset_location: '',
+        asset_value: '', message: ''
+      });
+      setSelectedFiles([]);
+      setConsentGiven(false);
 
     } catch (error) {
       setStatus('error');
