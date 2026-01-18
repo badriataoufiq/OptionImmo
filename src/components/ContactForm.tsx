@@ -92,6 +92,7 @@ export default function ContactForm() {
       }
 
       const apiUrl = import.meta.env.VITE_API_URL || '';
+console.log(apiUrl);
       const response = await fetch(`${apiUrl}/api/contact`, {
         method: 'POST',
         body: formDataToSend // Le navigateur gère automatiquement le 'Content-Type'
