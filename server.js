@@ -9,6 +9,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+console.log('inside server.js');
+console.log(app);
+
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
