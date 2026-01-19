@@ -8,7 +8,7 @@
 
   # 2. Proxy vers Node.js pour toutes les requêtes /api
   RewriteCond %{REQUEST_URI} ^/api [NC]
-  RewriteRule ^api/(.*) http://localhost/api/$1 [P,L]
+  RewriteRule ^api/(.*) http://localhost:443/api/$1 [P,L]
 
   # 3. Gestion du routage React (Single Page App)
   RewriteBase /
