@@ -7,9 +7,8 @@
   AddType application/json .json
 
   # 2. Proxy vers Node.js pour toutes les requêtes /api
-  # Assurez-vous que votre server.js écoute bien sur le port 3000
   RewriteCond %{REQUEST_URI} ^/api [NC]
-  RewriteRule ^api/(.*) http://localhost:3000/api/$1 [P,L]
+  RewriteRule ^api/(.*) http://localhost/api/$1 [P,L]
 
   # 3. Gestion du routage React (Single Page App)
   RewriteBase /
