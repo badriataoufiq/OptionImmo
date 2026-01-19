@@ -2,8 +2,8 @@
   RewriteEngine On
   
   # 1. Forcer le type MIME pour les modules JavaScript
-  AddType application/javascript .js
-  AddType application/javascript .mjs
+#  AddType application/javascript .js
+#  AddType application/javascript .mjs
   AddType application/json .json
 
   # 2. Proxy vers Node.js pour toutes les requêtes /api
