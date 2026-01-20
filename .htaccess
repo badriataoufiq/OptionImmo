@@ -12,7 +12,9 @@
 
   # 3. Gestion du routage React (Single Page App)
   RewriteBase /
-  RewriteRule ^index\.html$ - [L]
+#  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME}.html -f 
+  RewriteRule !.*\.html$ %{REQUEST_FILENAME}.html [L] 
   
   # Si le fichier ou le dossier demandé n'existe pas, on renvoie vers index.html
   RewriteCond %{REQUEST_FILENAME} !-f
