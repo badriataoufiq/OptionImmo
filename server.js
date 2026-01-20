@@ -16,12 +16,12 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Configuration de base
-/*app.use(cors({
-  origin: 'https://darkorchid-koala-619666.hostingersite.com',
+app.use(cors({
+  origin: 'https://optionimmo.be/',
   methods: ['GET', 'POST'],
   credentials: true
-}));*/
-app.use(cors());
+}));
+//app.use(cors());
 app.use(express.json());
 // Permet d'accéder aux photos via : https://ton-domaine.com/uploads/nom-photo.jpg
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
