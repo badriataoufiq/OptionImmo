@@ -7,8 +7,7 @@
   # B. PROXY API (Doit être AVANT le routage React)
   # On vérifie que la requête commence bien par /api
   RewriteCond %{REQUEST_URI} ^/api [NC]
-  # On envoie vers le port interne de Node.js (3000 par défaut)
-  RewriteRule ^api/(.*) http://127.0.0.1:3000/api/$1 [P,L]
+  RewriteRule ^api/(.*) http://127.0.0.1:443/api/$1 [P,L]
 
   # C. ROUTAGE REACT (Gestion des Single Page Apps)
   RewriteBase /
