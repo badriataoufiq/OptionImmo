@@ -109,4 +109,5 @@ app.listen(PORT, () => {
 
 app.get('/api/test', (req, res) => {
   res.json({ status: 'Le serveur répond bien !' });
+  console.log('TESTESTESTEST');
 });
