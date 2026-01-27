@@ -63,45 +63,38 @@ export default function ContactForm() {
     setStatus('loading');
 
     try {
-      // 1. On prépare un objet FormData pour envoyer fichiers + texte en une fois
       const formDataToSend = new FormData();
-      console.log('handleSubmit step1');
 
-      // Ajout des champs texte
-      formDataToSend.append('full_name', `${formData.first_name} ${formData.last_name}`.trim());
+      formDataToSend.append('first_name', formData.first_name);
+      formDataToSend.append('last_name', formData.last_name);
       formDataToSend.append('email', formData.email);
       formDataToSend.append('phone', formData.phone);
       formDataToSend.append('asset_type', formData.asset_type);
       formDataToSend.append('asset_location', formData.asset_location);
       formDataToSend.append('asset_value', formData.asset_value);
+      formDataToSend.append('deadline', formData.company);
       formDataToSend.append('message', formData.message);
-      formDataToSend.append('deadline', formData.company); // Ton champ company sert de deadline
 
-      // 2. Ajout des fichiers
       selectedFiles.forEach((file) => {
         formDataToSend.append('photos', file);
-        console.log('handleSubmit step2');
       });
 
-      // 3. Envoi vers ton API Hostinger (créée à l'étape 3)
-      console.log('handleSubmit step3');
-      for (let [key, value] of formDataToSend.entries()) {
-        console.log(key, value); 
-      }
-      
-      const apiUrl = import.meta.env.VITE_API_URL || '';
-console.log(apiUrl);
-      const response = await fetch(`${apiUrl}/api/contact`, {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/send-confirmation-email`, {
         method: 'POST',
-        body: formDataToSend // Le navigateur gère automatiquement le 'Content-Type'
+        headers: {
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+        },
+        body: formDataToSend
       });
-console.log(response);
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Erreur lors de l\'envoi');
       }
 
-      // Si tout est OK
       setStatus('success');
       setFormData({
         last_name: '', first_name: '', email: '', phone: '',
@@ -110,7 +103,6 @@ console.log(response);
       });
       setSelectedFiles([]);
       setConsentGiven(false);
-      console.log('handleSubmit stepOK');
 
     } catch (error) {
       setStatus('error');
